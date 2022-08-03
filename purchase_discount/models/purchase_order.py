@@ -57,24 +57,24 @@ class PurchaseOrderLine(models.Model):
             return self.price_unit * (1 - self.discount / 100)
         return self.price_unit
 
-    def _get_stock_move_price_unit(self):
-        """Get correct price with discount replacing current price_unit
-        value before calling super and restoring it later for assuring
-        maximum inheritability.
+#     def _get_stock_move_price_unit(self):
+#         """Get correct price with discount replacing current price_unit
+#         value before calling super and restoring it later for assuring
+#         maximum inheritability.
 
-        HACK: This is needed while https://github.com/odoo/odoo/pull/29983
-        is not merged.
-        """
-        price_unit = False
-        price = self._get_discounted_price_unit()
-        if price != self.price_unit:
-            # Only change value if it's different
-            price_unit = self.price_unit
-            self.price_unit = price
-        price = super()._get_stock_move_price_unit()
-        if price_unit:
-            self.price_unit = price_unit
-        return price
+#         HACK: This is needed while https://github.com/odoo/odoo/pull/29983
+#         is not merged.
+#         """
+#         price_unit = False
+#         price = self._get_discounted_price_unit()
+#         if price != self.price_unit:
+#             # Only change value if it's different
+#             price_unit = self.price_unit
+#             self.price_unit = price
+#         price = super()._get_stock_move_price_unit()
+#         if price_unit:
+#             self.price_unit = price_unit
+#         return price
 
     @api.onchange("product_qty", "product_uom")
     def _onchange_quantity(self):
